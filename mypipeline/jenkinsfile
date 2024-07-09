@@ -1,16 +1,16 @@
 pipeline {
   agent {
-    docker { image 'node:16-alpine' }
+    docker { image 'python:3' }
   }
 stages {
     stage('Test') {
       steps {
-        sh 'node --version'
+        sh 'python --version'
 }
   stages {
     stage('build') {
       steps {
-        sh 'docker build -t --name newimage node:16-alpine'
+        sh 'docker build -t newimage python:3'
       }
     }
   }
