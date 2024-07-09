@@ -1,17 +1,75 @@
 pipeline {
-  agent {
-    docker { image 'python:3' }
-  }
-stages {
-    stage('Test') {
-      steps {
-        sh 'python --version'
-}
-  stages {
-    stage('build') {
-      steps {
-        sh 'docker build -t newimage python:3'
-      }
+    agent any
+
+    environment {
+        // Define any environment variables you need here
+        // For example, you could define the Python version, virtual environment path, etc.
+        // Example: VENV_DIR = 'venv'
     }
-  }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the GitHub repository
+                git 'https://github.com/syedfaizan9920/todo-project-k8s.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                // Create a virtual environment and install dependencies
+                sh '''
+                python3 -m venv venv
+                source venv/bin/activate
+                pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                // Run a linting tool (e.g., flake8)
+                sh '''
+                source venv/bin/activate
+                flake8 .
+                '''
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run your tests (e.g., using pytest)
+                sh '''
+                source venv/bin/activate
+                pytest
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy your application
+                // The deployment process depends on where and how you want to deploy your app
+                // This could involve copying files, restarting services, etc.
+                // Here is an example of deploying to a server using scp and ssh
+                sh '''
+                scp -r * user@yourserver:/path/to/deploy
+                ssh user@yourserver 'systemctl restart your-app-service'
+                '''
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up
+            sh 'deactivate'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
 }
