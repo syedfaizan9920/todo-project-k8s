@@ -50,7 +50,7 @@ pipeline {
             steps {
                 // Deploy your application
                 // The deployment process depends on where and how you want to deploy your app
-                // This could involve copying files, restarting services, etc.
+                // This could involve copying files, restarting services, etc
                 // Here is an example of deploying to a server using scp and ssh
                 sh '''
                 scp -r * user@yourserver:/path/to/deploy
