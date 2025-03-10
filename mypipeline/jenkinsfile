@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    environment {faizan
+    environment {
         // Define any environment variables you need here
         // For example, you could define the Python version, virtual environment path, etc.
         // Example: VENV_DIR = 'venv'
