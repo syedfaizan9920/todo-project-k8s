@@ -1,4 +1,4 @@
-pipeline {
+dpipeline {
     agent 
 
     environment {
